@@ -5,8 +5,7 @@ object FocusNavigator {
     private var nodes: MutableList<AccessibilityNodeInfo> = mutableListOf()
     private var index = -1
     private var granularity = Granularity.CONTROL
-    fun setGranularity(g: Granularity) { granularity = g }
-    fun getGranularity(): Granularity = granularity
+    fun getGranularity() = granularity
     fun cycleGranularity(): Granularity {
         granularity = when (granularity) {
             Granularity.CONTROL -> Granularity.CHARACTER
@@ -31,12 +30,11 @@ object FocusNavigator {
     fun next(): AccessibilityNodeInfo? { if (nodes.isEmpty()) return null; index = (index + 1).coerceAtMost(nodes.lastIndex); return current() }
     fun prev(): AccessibilityNodeInfo? { if (nodes.isEmpty()) return null; index = (index - 1).coerceAtLeast(0); return current() }
     fun first(): AccessibilityNodeInfo? { if (nodes.isEmpty()) return null; index = 0; return current() }
-    fun size(): Int = nodes.size
+    fun size() = nodes.size
     fun speakCurrent(speak: (String) -> Unit) {
         val n = current()
         if (n == null) { speak(EarconFeedback.EMPTY); return }
-        val label = ReadingController.nodeLabel(n)
-        speak(label.ifBlank { EarconFeedback.EMPTY })
+        speak(ReadingController.nodeLabel(n).ifBlank { EarconFeedback.EMPTY })
     }
     fun activate(): Boolean {
         val n = current() ?: return false

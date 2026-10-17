@@ -1,6 +1,7 @@
 package ir.iran.screenreader
 
 import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Intent
 import android.os.SystemClock
 import android.view.accessibility.AccessibilityEvent
@@ -20,6 +21,16 @@ class IranAccessibilityService : AccessibilityService() {
         speech = SpeechManager(this)
         silence = SmartSilence(this)
         EarconPlayer.refreshVolume(this)
+
+        // Enable touch exploration so GESTURE_SWIPE_* are delivered
+        val info = serviceInfo
+        info.flags = info.flags or
+            AccessibilityServiceInfo.FLAG_REQUEST_TOUCH_EXPLORATION_MODE or
+            AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS or
+            AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS or
+            AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS
+        serviceInfo = info
+
         android.os.Handler(mainLooper).postDelayed({
             EarconPlayer.play(this, "menu")
             speech.speak("صفحه‌خوان ایران نسخه پنج آماده است")

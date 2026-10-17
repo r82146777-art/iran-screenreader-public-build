@@ -1,0 +1,73 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Download and extract source
+        run: |
+          curl -L --retry 3 -o src.zip "https://drive.google.com/uc?export=download&id=1Ga9ava6dBLqrAxVG2E1JMW3lHPNVES5X"
+          file src.zip
+          unzip -q src.zip || (echo "unzip failed"; ls -la; exit 1)
+          ls -la
+          if [ -d IranScreenReader ]; then
+            shopt -s dotglob
+            mv IranScreenReader/* .
+            rmdir IranScreenReader 2>/dev/null || rm -rf IranScreenReader
+          fi
+          rm -f src.zip
+          ls -la
+          test -f settings.gradle.kts && test -f app/build.gradle.kts
+
+      - name: Install Gradle 8.9
+        run: |
+          curl -sL https://services.gradle.org/distributions/gradle-8.9-bin.zip -o /tmp/gradle.zip
+          sudo unzip -q /tmp/gradle.zip -d /opt
+          echo "/opt/gradle-8.9/bin" >> $GITHUB_PATH
+          /opt/gradle-8.9/bin/gradle --version
+
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=${ANDROID_HOME:-$ANDROID_SDK_ROOT}" > local.properties
+          cat local.properties
+
+      - name: Accept licenses
+        run: |
+          mkdir -p "$ANDROID_HOME/licenses" 2>/dev/null || true
+          yes | sdkmanager --licenses || true
+
+      - name: Build debug APK
+        run: |
+          export PATH="/opt/gradle-8.9/bin:$PATH"
+          gradle wrapper --gradle-version 8.9
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Find APK
+        run: find . -name "*.apk" -type f -ls
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: iran-screenreader-debug-apk
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            **/outputs/apk/**/*.apk
+          if-no-files-found: error
+          retention-days: 5

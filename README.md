@@ -1,2 +1,1 @@
-# iran-screenreader-public-build
-Public temp build for Iran Screen Reader APK
+Build complete. APK delivered to Google Drive. This temporary public build repo can be deleted.

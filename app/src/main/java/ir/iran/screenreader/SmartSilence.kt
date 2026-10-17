@@ -1,10 +1,7 @@
 package ir.iran.screenreader
-
 import android.content.Context
-
 class SmartSilence(private val c: Context) {
-    private var last = ""
-    private var at = 0L
+    private var last = ""; private var at = 0L
     fun shouldSpeak(text: String): Boolean {
         if (!FeatureFlags.get(c, "smart_silence")) return true
         val now = System.currentTimeMillis()

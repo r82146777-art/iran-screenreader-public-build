@@ -8,6 +8,6 @@ class NotificationReaderService : NotificationListenerService() {
         val title = n.extras?.getCharSequence("android.title")?.toString().orEmpty()
         val text = n.extras?.getCharSequence("android.text")?.toString().orEmpty()
         val msg = listOf(title, text).filter { it.isNotBlank() }.joinToString(". ")
-        if (msg.isNotBlank()) IranAccessibilityService.instance?.speak("\u0627\u0639\u0644\u0627\u0646. $msg")
+        if (msg.isNotBlank()) IranAccessibilityService.instance?.speak("اعلان. $msg")
     }
 }

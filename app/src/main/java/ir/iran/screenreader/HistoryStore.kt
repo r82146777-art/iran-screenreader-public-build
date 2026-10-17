@@ -1,7 +1,5 @@
 package ir.iran.screenreader
-
 import android.content.Context
-
 object HistoryStore {
     private const val P = "iran_reader_history"
     fun add(c: Context, text: String) {

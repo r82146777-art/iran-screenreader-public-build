@@ -4,6 +4,6 @@ import android.content.Context
 import android.content.Intent
 class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        IranAccessibilityService.instance?.speak(intent.getStringExtra("msg") ?: "\u06cc\u0627\u062f\u0622\u0648\u0631")
+        IranAccessibilityService.instance?.speak(intent.getStringExtra("msg") ?: "یادآور")
     }
 }

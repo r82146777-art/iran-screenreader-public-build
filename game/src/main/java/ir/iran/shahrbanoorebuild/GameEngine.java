@@ -61,10 +61,15 @@ public final class GameEngine {
  public boolean useHint(){
   if(hints<=0||isComplete()||typed.length()>=current().answer.length())return false;
   hints--;char expected=current().answer.charAt(typed.length());
-  for(int i=0;i<choices.size();i++)if(!usedSlots.contains(i)&&choices.get(i).charAt(0)==expected){usedSlots.add(i);selectedSlots.add(i);selectedSlots.add(-1);typed.append(expected);return true;}
-  typed.append(expected);return true;
+  for(int i=0;i<choices.size();i++){
+   if(!usedSlots.contains(i)&&choices.get(i).charAt(0)==expected){
+    usedSlots.add(i);selectedSlots.add(i);typed.append(expected);return true;
+   }
+  }
+  selectedSlots.add(-1);typed.append(expected);return true;
  }
  public boolean submit(){if(isComplete()||!typed.toString().equals(current().answer))return false;index++;typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();return true;}
- public void clear(){typed.setLength(0);usedSlots.clear();}
- public void restart(){index=0;hints=3;typed.setLength(0);usedSlots.clear();makeChoices();}
+ public void clear(){typed.setLength(0);usedSlots.clear();selectedSlots.clear();}
+ public void restart(){index=0;hints=3;typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();}
+
 }

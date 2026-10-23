@@ -140,6 +140,7 @@ public final class GameEngine {
    loadAdditionalBank(context,"puzzle_word_bank_iran_batch_03.json",known);
    loadAdditionalBank(context,"puzzle_word_bank_iran_batch_04.json",known);
    loadAdditionalBank(context,"puzzle_word_bank_iran_batch_05.json",known);
+   loadAdditionalBank(context,"puzzle_word_bank_iran_batch_06.json",known);
   }catch(Exception e){android.util.Log.e("Shahrbanoo","Could not load curated Persian word bank",e);}
  }
  private void loadAdditionalBank(Context context,String assetName,Set<String> known){

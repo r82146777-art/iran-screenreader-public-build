@@ -1,12 +1,27 @@
-# Shahrbanoo Accessible native rebuild
+# Shahrbanoo Accessible Native Rebuild
 
-This is an independent Android reconstruction using Kotlin and Java, not the original Unity source.
+This is an independent Android reconstruction, not the original Unity project or original APK.
 
-Current features: 30 sample Persian word-puzzle stages, Android native controls intended for TalkBack, Persian Android TTS when installed, synthesized device tone effects for taps/menu/start/stage/hint/correct/wrong/win, hints, answer checking, backspace, clear and restart.
+## Features
+- Persian word-puzzle gameplay with 30 sample stages.
+- Native Android controls with TalkBack descriptions.
+- The letter keyboard is not rebuilt after each letter tap, helping TalkBack retain focus on the selected keyboard item.
+- Persian Android text-to-speech when a compatible Persian voice is installed on the device.
+- Settings for sound effects, a generated electronic melody, high contrast, larger text, and speech rate.
+- Hints, answer checking, backspace, clear, restart, and spoken stage clues.
+- Synthesized audio cues for taps, menus, stages, hints, correct/wrong answers, and winning.
 
-Voice note: speech uses the Persian voice data available on the device. The APK does not bundle a natural Persian speech model. If the device has no Persian TTS voice, install a Persian-capable TTS engine/data. Effects are synthesized Android tones, not the original game's music or sound assets.
+## Voice and audio limitations
+Speech uses the Persian voice data available on the device; the APK does not bundle a natural Persian speech model. If the device has no Persian TTS voice, install a Persian-capable TTS engine/data. The optional melody and sound cues are generated electronically and are not the original game's music, voice actor, or sound assets.
 
-Limits: the supplied archives did not contain the full Unity project, original art/audio files, or original stage database. The app id is `ir.iran.shahrbanoorebuild`, so it installs separately from `com.plus9.shahrbanoo`. This independent sample rebuild has not yet been device-tested with TalkBack.
+## Important limits
+The supplied archive did not contain the full Unity project, original art/audio files, or the original stage database. This app uses application ID `ir.iran.shahrbanoorebuild`, so it installs separately from `com.plus9.shahrbanoo`. The code changes are not a substitute for testing with TalkBack on a physical Android device; focus behavior, speech, and audio should be verified on the target phone.
 
-Build from repo root: `./gradlew :game:assembleDebug`
+## Build
+From the repository root:
+
+```sh
+./gradlew --no-daemon :game:assembleDebug
+```
+
 Expected output: `game/build/outputs/apk/debug/game-debug.apk`

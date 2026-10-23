@@ -3,6 +3,7 @@ package ir.iran.shahrbanoorebuild
 import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 
@@ -10,8 +11,7 @@ import android.os.Looper
 object GameSound {
  private var tone: ToneGenerator? = null
  private val handler = Handler(Looper.getMainLooper())
- @Volatile private var musicRunning = false
- @Volatile private var musicThread: Thread? = null
+ @Volatile private var musicPlayer: MediaPlayer? = null
 
  fun play(context: Context, kind: String) {
   try {
@@ -34,32 +34,7 @@ object GameSound {
   handler.postDelayed({ try { t.startTone(toneType, duration) } catch (_: Exception) { } }, 95L)
  }
 
- @Synchronized fun startMusic() {
-  if (musicRunning) return
-  musicRunning = true
-  musicThread = Thread {
-   val notes = intArrayOf(ToneGenerator.TONE_DTMF_1, ToneGenerator.TONE_DTMF_3, ToneGenerator.TONE_DTMF_5, ToneGenerator.TONE_DTMF_3,
-    ToneGenerator.TONE_DTMF_2, ToneGenerator.TONE_DTMF_4, ToneGenerator.TONE_DTMF_6, ToneGenerator.TONE_DTMF_4)
-   try {
-    var i = 0
-    while (musicRunning) {
-     val t = tone ?: break
-     t.startTone(notes[i++ % notes.size], 170)
-     Thread.sleep(260)
-    }
-   } catch (_: InterruptedException) { }
-   catch (_: Exception) { }
-  }.apply { name = "ShahrbanooMelody"; isDaemon = true; start() }
- }
-
- @Synchronized fun stopMusic() {
-  musicRunning = false
-  musicThread?.interrupt()
-  musicThread = null
-  try { tone?.stopTone() } catch (_: Exception) { }
- }
-
- fun release() {
+ @Synchronized fun startMusic(context: Context) {\n  if (musicPlayer?.isPlaying == true) return\n  stopMusic()\n  try {\n   musicPlayer = MediaPlayer.create(context.applicationContext, R.raw.background_music)?.apply {\n    isLooping = true\n    setVolume(0.32f, 0.32f)\n    start()\n   }\n  } catch (_: Exception) { musicPlayer = null }\n }\n\n @Synchronized fun stopMusic() {\n  try { musicPlayer?.stop() } catch (_: Exception) { }\n  try { musicPlayer?.release() } catch (_: Exception) { }\n  musicPlayer = null\n }\n\n fun release() {
   stopMusic()
   try { tone?.release() } catch (_: Exception) { }
   tone = null

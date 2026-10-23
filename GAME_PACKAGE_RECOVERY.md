@@ -32,3 +32,8 @@ This is a lead for locating the complete package set, not confirmation that any 
 - No accessible rebuild of `com.plus9.shahrbanoo` has been produced.
 - No external XAPK has been downloaded or verified in this investigation.
 - This file records the recovery lead and does not claim that the game has been fixed.
+
+
+## Additional listing lead
+
+A second public listing at https://barato.ir/shahrbanoo/ describes version 5.80 as a 125 MB direct APK. This listing has not been downloaded or verified either. Treat it as an alternative lead only; verify package ID, version code, signature, archive integrity, and native-library contents before use. A third-party claim that a file is "direct APK" does not establish that it is safe or complete.

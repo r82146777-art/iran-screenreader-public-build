@@ -119,7 +119,7 @@ public final class GameEngine {
  private int index=0,hints=3; private final StringBuilder typed=new StringBuilder();
  private List<String> choices=new ArrayList<>();
  private final Set<Integer> usedSlots=new HashSet<>(); private final List<Integer> selectedSlots=new ArrayList<>();
- public GameEngine(Context context){loadCuratedBank(context);makeChoices();}
+ public GameEngine(Context context){loadCuratedBank(context);makeChoices();android.util.Log.i("Shahrbanoo","Loaded "+stages.size()+" unique puzzle stages");}
  private void loadCuratedBank(Context context){
   Set<String> known=new HashSet<>();
   for(Stage s:stages) known.add(normalize(s.answer));

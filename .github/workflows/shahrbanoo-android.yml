@@ -44,8 +44,7 @@ jobs:
               gh api --method POST "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/cancel" || true
             done
           done
-      - name: Download bundled offline Persian neural voice
-        run: |
+      - name: Download licensed CC0 puzzle background music\n        run: |\n          set -euo pipefail\n          mkdir -p game/src/main/res/raw\n          curl -fL --retry 3 "https://opengameart.org/sites/default/files/cozy_puzzle_in-game_1_bpm118.mp3" -o game/src/main/res/raw/background_music.mp3\n          test -s game/src/main/res/raw/background_music.mp3\n          echo "Bundled CC0 puzzle music: $(du -h game/src/main/res/raw/background_music.mp3 | cut -f1)"\n      - name: Download bundled offline Persian neural voice\n        run: |
           set -euo pipefail
           RELEASE="https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models"
           ASSETS="game/src/main/assets/tts"

@@ -6,7 +6,7 @@ public final class GameEngine {
   public final int number; public final String category, answer, clue;
   Stage(int n,String c,String a,String h){number=n;category=c;answer=a.replace("\u200c","").replace(" ","");clue=h;}
  }
- private final List<Stage> stages=Arrays.asList(
+ private final List<Stage> stages=new ArrayList<>(Arrays.asList(
   new Stage(1,"میوه‌ها","سیب","میوه‌ای گرد که ممکن است قرمز یا سبز باشد"),
   new Stage(2,"خانه","در","برای وارد شدن به اتاق از آن عبور می‌کنیم"),
   new Stage(3,"طبیعت","باران","قطره‌های آبی که از ابر می‌بارند"),
@@ -108,7 +108,37 @@ public final class GameEngine {
   ,new Stage(99,"طبیعت","تنوع‌زیستی","گوناگونی گونه‌های جاندار در یک منطقه")
   ,new Stage(100,"دانش","هوش‌مصنوعی","فناوری‌ای برای انجام کارهایی که به هوش نیاز دارند")
 
- );
+ ));
+ {
+  // First 100 stages are curated; the remaining puzzles are generated deterministically.
+  for (int i = 0; i < 2900; i++) {
+   int number = i + 101;
+   int parts = number <= 1000 ? 2 : (number <= 2000 ? 3 : 4);
+   int a = i % 100;
+   int b = (i / 100 + i * 13 + 7) % 100;
+   int c = (i / 10 + i * 17 + 23) % 100;
+   int d = (i / 7 + i * 29 + 31) % 100;
+   Stage first = stages.get(a);
+   Stage second = stages.get(b);
+   StringBuilder answer = new StringBuilder(first.answer).append(second.answer);
+   StringBuilder clue = new StringBuilder("بخش‌ها را به همین ترتیب به هم بچسبانید: «")
+      .append(first.answer).append("» سپس «").append(second.answer).append("»");
+   if (parts >= 3) {
+    Stage third = stages.get(c);
+    answer.append(third.answer);
+    clue.append(" و سپس «").append(third.answer).append("»");
+   }
+   if (parts >= 4) {
+    Stage fourth = stages.get(d);
+    answer.append(fourth.answer);
+    clue.append(" و در پایان «").append(fourth.answer).append("»");
+   }
+   clue.append(". ترتیب بخش‌ها مهم است.");
+   stages.add(new Stage(number, parts == 2 ? "ترکیب دو واژه" : (parts == 3 ? "ترکیب سه واژه" : "ترکیب چهار واژه"),
+      answer.toString(), clue.toString()));
+  }
+ }
+
  private int index=0,hints=3; private final StringBuilder typed=new StringBuilder();
  private List<String> choices=new ArrayList<>();
  private final Set<Integer> usedSlots=new HashSet<>(); private final List<Integer> selectedSlots=new ArrayList<>();

@@ -156,7 +156,6 @@ public final class GameEngine {
    }
   }catch(Exception e){android.util.Log.e("Shahrbanoo","Could not load additional puzzle bank: "+assetName,e);}
  }
- }
  private static String normalize(String value){return value.replace("\u200c","").replace("\u200f","").replace(" ","").replace("ي","ی").replace("ك","ک").trim();}
  public Stage current(){return stages.get(index);} public int stageCount(){return stages.size();}
  public int index(){return index;} public String typed(){return typed.toString();}

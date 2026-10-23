@@ -15,6 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  actions: write
   contents: read
 
 jobs:
@@ -28,6 +29,21 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Cancel old duplicate APK build runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          for status in queued in_progress; do
+            gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?status=$status&per_page=100" \
+              -q '.workflow_runs[] | select(.path == ".github/workflows/build-apk.yml") | .id' |
+            while read -r run_id; do
+              [ -n "$run_id" ] || continue
+              [ "$run_id" = "$GITHUB_RUN_ID" ] && continue
+              echo "Cancelling old duplicate build run $run_id"
+              gh api --method POST "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/cancel" || true
+            done
+          done
       - name: Download bundled offline Persian neural voice
         run: |
           set -euo pipefail

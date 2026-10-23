@@ -34,7 +34,25 @@ object GameSound {
   handler.postDelayed({ try { t.startTone(toneType, duration) } catch (_: Exception) { } }, 95L)
  }
 
- @Synchronized fun startMusic(context: Context) {\n  if (musicPlayer?.isPlaying == true) return\n  stopMusic()\n  try {\n   musicPlayer = MediaPlayer.create(context.applicationContext, R.raw.background_music)?.apply {\n    isLooping = true\n    setVolume(0.32f, 0.32f)\n    start()\n   }\n  } catch (_: Exception) { musicPlayer = null }\n }\n\n @Synchronized fun stopMusic() {\n  try { musicPlayer?.stop() } catch (_: Exception) { }\n  try { musicPlayer?.release() } catch (_: Exception) { }\n  musicPlayer = null\n }\n\n fun release() {
+ @Synchronized fun startMusic(context: Context) {
+  if (musicPlayer?.isPlaying == true) return
+  stopMusic()
+  try {
+   musicPlayer = MediaPlayer.create(context.applicationContext, R.raw.background_music)?.apply {
+    isLooping = true
+    setVolume(0.32f, 0.32f)
+    start()
+   }
+  } catch (_: Exception) { musicPlayer = null }
+ }
+
+ @Synchronized fun stopMusic() {
+  try { musicPlayer?.stop() } catch (_: Exception) { }
+  try { musicPlayer?.release() } catch (_: Exception) { }
+  musicPlayer = null
+ }
+
+ fun release() {
   stopMusic()
   try { tone?.release() } catch (_: Exception) { }
   tone = null

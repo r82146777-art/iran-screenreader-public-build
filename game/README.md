@@ -2,7 +2,7 @@
 
 This is an independent Android reconstruction using Kotlin and Java, not the original Unity source.
 
-Current features: 30 sample Persian word-puzzle stages, Android native controls intended for TalkBack, Persian Android TTS when installed, synthesized device tone effects for taps/menu/start/stage/hint/correct/wrong/win, short vibration cues, hints, answer checking, backspace, clear and restart.
+Current features: 30 sample Persian word-puzzle stages, Android native controls intended for TalkBack, Persian Android TTS when installed, synthesized device tone effects for taps/menu/start/stage/hint/correct/wrong/win, hints, answer checking, backspace, clear and restart.
 
 Voice note: speech uses the Persian voice data available on the device. The APK does not bundle a natural Persian speech model. If the device has no Persian TTS voice, install a Persian-capable TTS engine/data. Effects are synthesized Android tones, not the original game's music or sound assets.
 

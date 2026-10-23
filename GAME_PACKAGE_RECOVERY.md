@@ -37,3 +37,22 @@ This is a lead for locating the complete package set, not confirmation that any 
 ## Additional listing lead
 
 A second public listing at https://barato.ir/shahrbanoo/ describes version 5.80 as a 125 MB direct APK. This listing has not been downloaded or verified either. Treat it as an alternative lead only; verify package ID, version code, signature, archive integrity, and native-library contents before use. A third-party claim that a file is "direct APK" does not establish that it is safe or complete.
+
+
+## Local file cross-check (2026-10-23)
+
+The supplied `/mnt/data/base.apk` was checked again locally:
+
+- SHA-1: `955d6b40a0e0fa1f4e4b6fd985166ffe92a310d9`
+- SHA-256: `57226a7a6e1ddbce15f0205a3641c65306930008c429761ef0d6ed1634f4e418`
+- ZIP entries: 947
+- Native `.so` files: 0
+- Paths under `lib/`: 0
+- Editable Unity `.unity`, `.prefab`, or `.cs` files: 0
+
+The APKFab page reports variant SHA-1 values `dd1af8e0738cef249501545d97de58450de78c6d` (arm64-v8a) and `c8239be265a940218527cabf7555da28cfadd7fd` (armeabi-v7a). The supplied base APK SHA-1 matches neither listing value. This is consistent with the listing values referring to complete XAPK variants rather than this one base APK, but that interpretation is not independently verified. It means we cannot claim that the supplied APK is the complete package from that listing.
+
+## Official developer support route
+
+The Google Play listing for the same package is https://play.google.com/store/apps/details?id=com.plus9.shahrbanoo and lists developer support email `shahrbanoogame@gmail.com`. If binary patching proves infeasible, the reliable route is to request an accessible build or permission/source access from the developer. No message has been sent.
+

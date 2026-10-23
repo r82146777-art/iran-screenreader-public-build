@@ -7,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.graphics.Color
 import android.graphics.Typeface
-import android.speech.tts.TextToSpeech
 import android.widget.*
 import android.content.SharedPreferences
-import java.util.Locale
 
 /** Accessible native word puzzle. Keep the letter keyboard stable while typing so TalkBack focus does not jump to the top. */
-class MainActivity : Activity(), TextToSpeech.OnInitListener {
- private lateinit var tts:TextToSpeech
- private var ttsReady=false
+class MainActivity : Activity() {
  private lateinit var prefs:SharedPreferences
  private val game=GameEngine()
  private lateinit var root:LinearLayout
@@ -30,30 +26,12 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
   super.onCreate(savedInstanceState)
   prefs=getSharedPreferences("shahrbanoo_settings",MODE_PRIVATE)
   window.decorView.layoutDirection=View.LAYOUT_DIRECTION_RTL
-  tts=TextToSpeech(this,this)
   home()
- }
- override fun onInit(status:Int){
-  if(status==TextToSpeech.SUCCESS){
-   val result=tts.setLanguage(Locale("fa","IR"))
-   ttsReady=result!=TextToSpeech.LANG_MISSING_DATA&&result!=TextToSpeech.LANG_NOT_SUPPORTED
-   applyVoiceSettings()
-   if(ttsReady){
-    val persianVoice=tts.voices?.filter{it.locale.language=="fa"}?.maxByOrNull{it.quality}
-    if(persianVoice!=null)tts.voice=persianVoice
-    speak("شهربانو آماده است. دکمه شروع بازی را انتخاب کنید.")
-   }
-  }
- }
- private fun applyVoiceSettings(){
-  if(!::tts.isInitialized)return
-  tts.setSpeechRate(prefs.getFloat("speech_rate",0.92f))
-  tts.setPitch(1.02f)
  }
  private fun speak(s:String){
   live.text=s
   live.announceForAccessibility(s)
-  if(ttsReady)tts.speak(s,TextToSpeech.QUEUE_FLUSH,null,"game-${System.currentTimeMillis()}")
+  NaturalPersianVoice.speak(this,s,prefs.getFloat("speech_rate",0.92f))
  }
  private fun play(kind:String){if(soundEnabled())GameSound.play(this,kind)}
  private fun layout(title:String){
@@ -137,7 +115,7 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
   rateGroup.setOnCheckedChangeListener{group,id->
    val selected=group.findViewById<RadioButton>(id)
    val rate=selected?.tag as? Float
-   if(rate!=null){prefs.edit().putFloat("speech_rate",rate).apply();applyVoiceSettings();speak("سرعت گوینده تغییر کرد.")}
+   if(rate!=null){prefs.edit().putFloat("speech_rate",rate).apply();speak("سرعت گوینده تغییر کرد.")}
   }
   root.addView(rateGroup,params())
   button("آزمایش گوینده"){speak("سلام! این صدای راهنمای بازی شهربانو است.")}
@@ -232,5 +210,5 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
   GameSound.stopMusic()
   super.onPause()
  }
- override fun onDestroy(){if(::tts.isInitialized){tts.stop();tts.shutdown()};GameSound.release();super.onDestroy()}
+ override fun onDestroy(){NaturalPersianVoice.release();GameSound.release();super.onDestroy()}
 }

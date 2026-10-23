@@ -135,7 +135,24 @@ public final class GameEngine {
     if(category.isEmpty()||answer.isEmpty()||clue.isEmpty()||key.length()<2||known.contains(key))continue;
     known.add(key);stages.add(new Stage(stages.size()+1,category,answer,clue));
    }
+   loadAdditionalBank(context,"puzzle_word_bank_iran_batch_01.json",known);
   }catch(Exception e){android.util.Log.e("Shahrbanoo","Could not load curated Persian word bank",e);}
+ }
+ private void loadAdditionalBank(Context context,String assetName,Set<String> known){
+  try(BufferedReader reader=new BufferedReader(new InputStreamReader(context.getAssets().open(assetName),"UTF-8"))){
+   StringBuilder raw=new StringBuilder();String line;while((line=reader.readLine())!=null)raw.append(line);
+   JSONArray entries=new JSONObject(raw.toString()).getJSONArray("entries");
+   for(int i=0;i<entries.length();i++){
+    JSONObject item=entries.getJSONObject(i);
+    String category=item.optString("category","").trim();
+    String answer=item.optString("answer","").trim();
+    String clue=item.optString("clue","").trim();
+    String key=normalize(answer);
+    if(category.isEmpty()||answer.isEmpty()||clue.isEmpty()||key.length()<2||known.contains(key))continue;
+    known.add(key);stages.add(new Stage(stages.size()+1,category,answer,clue));
+   }
+  }catch(Exception e){android.util.Log.e("Shahrbanoo","Could not load additional puzzle bank: "+assetName,e);}
+ }
  }
  private static String normalize(String value){return value.replace("\u200c","").replace("\u200f","").replace(" ","").replace("ي","ی").replace("ك","ک").trim();}
  public Stage current(){return stages.get(index);} public int stageCount(){return stages.size();}

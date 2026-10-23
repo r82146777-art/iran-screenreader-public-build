@@ -6,7 +6,7 @@ This is an independent Android reconstruction, not the original Unity project or
 - Persian word-puzzle gameplay with 100 stages, with longer and less familiar words introduced in later groups.
 - Native Android controls with TalkBack descriptions.
 - The letter keyboard is not rebuilt after each letter tap, helping TalkBack retain focus on the selected keyboard item.
-- Persian Android text-to-speech when a compatible Persian voice is installed on the device.
+- Bundled offline Persian neural voice (Piper VITS through Sherpa-ONNX); gameplay speech does not call the phone's system TTS.
 - Settings for sound effects, a generated electronic melody, high contrast, larger text, and speech rate.
 - Hints, answer checking, backspace, clear, restart, and spoken stage clues.
 - Synthesized audio cues for taps, menus, stages, hints, correct/wrong answers, and winning.

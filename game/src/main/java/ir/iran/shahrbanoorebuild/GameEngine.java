@@ -4,7 +4,7 @@ import java.util.*;
 public final class GameEngine {
  public static final class Stage {
   public final int number; public final String category, answer, clue;
-  Stage(int n,String c,String a,String h){number=n;category=c;answer=a;clue=h;}
+  Stage(int n,String c,String a,String h){number=n;category=c;answer=a.replace("\u200c","").replace(" ","");clue=h;}
  }
  private final List<Stage> stages=Arrays.asList(
   new Stage(1,"میوه‌ها","سیب","میوه‌ای گرد که ممکن است قرمز یا سبز باشد"),

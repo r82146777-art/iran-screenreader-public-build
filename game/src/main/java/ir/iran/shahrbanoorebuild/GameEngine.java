@@ -121,19 +121,19 @@ public final class GameEngine {
    Stage first = stages.get(a);
    Stage second = stages.get(b);
    StringBuilder answer = new StringBuilder(first.answer).append(second.answer);
-   StringBuilder clue = new StringBuilder("بخش‌ها را به همین ترتیب به هم بچسبانید: «")
-      .append(first.answer).append("» سپس «").append(second.answer).append("»");
+   StringBuilder clue = new StringBuilder("واژه‌ای ترکیبی بسازید. بخش اول: ")
+      .append(first.clue).append(". بخش دوم: ").append(second.clue);
    if (parts >= 3) {
     Stage third = stages.get(c);
     answer.append(third.answer);
-    clue.append(" و سپس «").append(third.answer).append("»");
+    clue.append(". بخش سوم: ").append(third.clue);
    }
    if (parts >= 4) {
     Stage fourth = stages.get(d);
     answer.append(fourth.answer);
-    clue.append(" و در پایان «").append(fourth.answer).append("»");
+    clue.append(". بخش چهارم: ").append(fourth.clue);
    }
-   clue.append(". ترتیب بخش‌ها مهم است.");
+   clue.append(". پاسخ را از حروف واژه‌های سرنخ‌ها به همین ترتیب بسازید؛ ترتیب و تکمیل همه بخش‌ها مهم است.");
    stages.add(new Stage(number, parts == 2 ? "ترکیب دو واژه" : (parts == 3 ? "ترکیب سه واژه" : "ترکیب چهار واژه"),
       answer.toString(), clue.toString()));
   }

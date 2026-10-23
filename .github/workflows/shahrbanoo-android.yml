@@ -5,10 +5,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "game/**"
+      - "game/src/main/java/**"
+      - "game/src/main/res/**"
+      - "game/build.gradle.kts"
       - "build.gradle.kts"
       - "settings.gradle.kts"
-      - ".github/workflows/shahrbanoo-android.yml"
 
 concurrency:
   group: shahrbanoo-build-${{ github.ref }}

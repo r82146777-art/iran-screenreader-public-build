@@ -18,6 +18,12 @@ The supplied Unity game APK declares package ID `com.plus9.shahrbanoo` and versi
 
 These are different Android applications. Therefore, an APK produced by this repository's current `app` module is the standalone Iran Screen Reader app, **not a rebuilt or accessibility-patched copy of the supplied Unity game**. A successful workflow run or an artifact named `iran-screenreader-v5-apk` must not be presented as the modified game APK.
 
+## Latest build result
+
+On 2026-10-23, GitHub Actions run [39907719818](https://github.com/r82146777-art/iran-screenreader-public-build/actions/runs/39907719818) completed successfully. The build and artifact-upload steps both passed. It produced artifact `iran-screenreader-v5-apk` (about 4.95 MB), available through GitHub Actions until 2027-01-21.
+
+This result confirms that the separate `ir.iran.screenreader` app module compiles. It does **not** mean the supplied Unity game has been modified. The artifact is a workflow ZIP containing the build output; it is not a direct APK URL and is not the requested accessible game.
+
 ## What the workflow can prove
 
 A successful run proves only that the repository's Android app module compiled and packaged. It does not prove that the Unity game has been modified, that the Unity game's native libraries/splits are complete, or that TalkBack can navigate the game's screens.

@@ -3,10 +3,13 @@ package ir.iran.shahrbanoorebuild
 import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.os.Handler
+import android.os.Looper
 
 /** Accessible game sound cues and a lightweight optional synthesized melody. */
 object GameSound {
  private var tone: ToneGenerator? = null
+ private val handler = Handler(Looper.getMainLooper())
  @Volatile private var musicRunning = false
  @Volatile private var musicThread: Thread? = null
 
@@ -28,7 +31,7 @@ object GameSound {
   } catch (_: Exception) { }
  }
  private fun later(t: ToneGenerator, toneType: Int, duration: Int) {
-  try { Thread.sleep(95); t.startTone(toneType, duration) } catch (_: Exception) { }
+  handler.postDelayed({ try { t.startTone(toneType, duration) } catch (_: Exception) { } }, 95L)
  }
 
  @Synchronized fun startMusic() {

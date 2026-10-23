@@ -137,7 +137,7 @@ public final class GameEngine {
    }
   }catch(Exception e){android.util.Log.e("Shahrbanoo","Could not load curated Persian word bank",e);}
  }
- private static String normalize(String value){return value.replace("\\u200c","").replace(" ","").trim();}
+ private static String normalize(String value){return value.replace("\u200c","").replace(" ","").trim();}
  public Stage current(){return stages.get(index);} public int stageCount(){return stages.size();}
  public int index(){return index;} public String typed(){return typed.toString();}
  public int hints(){return hints;} public boolean isComplete(){return index>=stages.size();}

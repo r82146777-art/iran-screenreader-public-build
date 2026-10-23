@@ -109,35 +109,7 @@ public final class GameEngine {
   ,new Stage(100,"دانش","هوش‌مصنوعی","فناوری‌ای برای انجام کارهایی که به هوش نیاز دارند")
 
  ));
- {
-  // First 100 stages are curated; the remaining puzzles are generated deterministically.
-  for (int i = 0; i < 2900; i++) {
-   int number = i + 101;
-   int parts = number <= 1000 ? 2 : (number <= 2000 ? 3 : 4);
-   int a = i % 100;
-   int b = (i / 100 + i * 13 + 7) % 100;
-   int c = (i / 10 + i * 17 + 23) % 100;
-   int d = (i / 7 + i * 29 + 31) % 100;
-   Stage first = stages.get(a);
-   Stage second = stages.get(b);
-   StringBuilder answer = new StringBuilder(first.answer).append(second.answer);
-   StringBuilder clue = new StringBuilder("واژه‌ای ترکیبی بسازید. بخش اول: ")
-      .append(first.clue).append(". بخش دوم: ").append(second.clue);
-   if (parts >= 3) {
-    Stage third = stages.get(c);
-    answer.append(third.answer);
-    clue.append(". بخش سوم: ").append(third.clue);
-   }
-   if (parts >= 4) {
-    Stage fourth = stages.get(d);
-    answer.append(fourth.answer);
-    clue.append(". بخش چهارم: ").append(fourth.clue);
-   }
-   clue.append(". پاسخ را از حروف واژه‌های سرنخ‌ها به همین ترتیب بسازید؛ ترتیب و تکمیل همه بخش‌ها مهم است.");
-   stages.add(new Stage(number, parts == 2 ? "ترکیب دو واژه" : (parts == 3 ? "ترکیب سه واژه" : "ترکیب چهار واژه"),
-      answer.toString(), clue.toString()));
-  }
- }
+
 
  private int index=0,hints=3; private final StringBuilder typed=new StringBuilder();
  private List<String> choices=new ArrayList<>();

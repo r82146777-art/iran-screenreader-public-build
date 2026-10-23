@@ -40,7 +40,7 @@ public final class GameEngine {
  );
  private int index=0,hints=3; private final StringBuilder typed=new StringBuilder();
  private List<String> choices=new ArrayList<>();
- private final Set<Integer> usedSlots=new HashSet<>();
+ private final Set<Integer> usedSlots=new HashSet<>(); private final List<Integer> selectedSlots=new ArrayList<>();
  public GameEngine(){makeChoices();}
  public Stage current(){return stages.get(index);} public int stageCount(){return stages.size();}
  public int index(){return index;} public String typed(){return typed.toString();}
@@ -56,15 +56,15 @@ public final class GameEngine {
  public List<String> availableLetters(){return new ArrayList<>(choices);}
  public boolean isSlotUsed(int slot){return usedSlots.contains(slot);}
  public void addLetter(String s){if(!isComplete())typed.append(s);}
- public void addLetterAt(int slot){if(isComplete()||slot<0||slot>=choices.size()||usedSlots.contains(slot))return;usedSlots.add(slot);typed.append(choices.get(slot));}
- public void backspace(){if(typed.length()>0){typed.deleteCharAt(typed.length()-1);if(!usedSlots.isEmpty()){int last=-1;for(int n:usedSlots)if(n>last)last=n;usedSlots.remove(last);}}}
+ public void addLetterAt(int slot){if(isComplete()||slot<0||slot>=choices.size()||usedSlots.contains(slot))return;usedSlots.add(slot);selectedSlots.add(slot);typed.append(choices.get(slot));}
+ public void backspace(){if(typed.length()>0){typed.deleteCharAt(typed.length()-1);if(!selectedSlots.isEmpty()){int last=selectedSlots.remove(selectedSlots.size()-1);if(last>=0)usedSlots.remove(last);}}}
  public boolean useHint(){
   if(hints<=0||isComplete()||typed.length()>=current().answer.length())return false;
   hints--;char expected=current().answer.charAt(typed.length());
-  for(int i=0;i<choices.size();i++)if(!usedSlots.contains(i)&&choices.get(i).charAt(0)==expected){usedSlots.add(i);typed.append(expected);return true;}
+  for(int i=0;i<choices.size();i++)if(!usedSlots.contains(i)&&choices.get(i).charAt(0)==expected){usedSlots.add(i);selectedSlots.add(i);selectedSlots.add(-1);typed.append(expected);return true;}
   typed.append(expected);return true;
  }
- public boolean submit(){if(isComplete()||!typed.toString().equals(current().answer))return false;index++;typed.setLength(0);usedSlots.clear();makeChoices();return true;}
+ public boolean submit(){if(isComplete()||!typed.toString().equals(current().answer))return false;index++;typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();return true;}
  public void clear(){typed.setLength(0);usedSlots.clear();}
  public void restart(){index=0;hints=3;typed.setLength(0);usedSlots.clear();makeChoices();}
 }

@@ -102,6 +102,16 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
    setOnCheckedChangeListener{_,checked->prefs.edit().putBoolean("sound_enabled",checked).apply();if(checked)GameSound.play(this@MainActivity,"correct")}
   }
   root.addView(sound,params())
+  val music=CheckBox(this).apply{
+   text="موسیقی پس‌زمینه (ملودی ساخته‌شده داخل برنامه)";textSize=19f
+   isChecked=prefs.getBoolean("music_enabled",false)
+   setTextColor(if(highContrast())Color.WHITE else Color.BLACK)
+   setOnCheckedChangeListener{_,checked->
+    prefs.edit().putBoolean("music_enabled",checked).apply()
+    if(checked)GameSound.startMusic() else GameSound.stopMusic()
+   }
+  }
+  root.addView(music,params())
   val contrast=CheckBox(this).apply{
    text="حالت کنتراست بالا";textSize=19f;isChecked=highContrast()
    setTextColor(if(highContrast())Color.WHITE else Color.BLACK)
@@ -207,5 +217,13 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
   },params().apply{setMargins(0,6,0,6)})
  }
  private fun params()=LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
+ override fun onResume(){
+  super.onResume()
+  if(::prefs.isInitialized && prefs.getBoolean("music_enabled",false))GameSound.startMusic()
+ }
+ override fun onPause(){
+  GameSound.stopMusic()
+  super.onPause()
+ }
  override fun onDestroy(){if(::tts.isInitialized){tts.stop();tts.shutdown()};GameSound.release();super.onDestroy()}
 }

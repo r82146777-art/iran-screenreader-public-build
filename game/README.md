@@ -1,18 +1,12 @@
-# شهربانو دسترس‌پذیر — بازنویسی بومی Android
-این ماژول یک بازنویسی مستقل با Kotlin و Java است؛ سورس اصلی Unity نیست.
+# Shahrbanoo Accessible native rebuild
 
-## پیاده‌سازی‌شده
-- کنترل‌های بومی اندروید برای دسترسی از طریق TalkBack
-- اعلام فارسی با TTS برای مرحله، سرنخ و نتیجه
-- منطق بازی جاوا، نمونه مراحل، راهنمایی، پاک‌کردن و بررسی پاسخ
-- منو، راهنما و شروع دوباره
+This is an independent Android reconstruction using Kotlin and Java, not the original Unity source.
 
-## محدودیت‌های مهم
-- فایل‌های ارسالی پروژه کامل Unity، فهرست اصلی مراحل، فایل‌های هنری یا فایل‌های صوتی جداگانه را دربر نداشتند.
-- در APK و ZIP همراه هیچ فایل صوتی مستقل WAV/MP3/OGG پیدا نشد. فعلاً از TTS اندروید استفاده می‌شود؛ موسیقی و افکت‌های اصلی بازی هنوز بازیابی نشده‌اند.
-- بستهٔ اصلی `com.plus9.shahrbanoo` است؛ این بازسازی شناسهٔ جداگانهٔ `ir.iran.shahrbanoorebuild` دارد و جایگزین/به‌روزرسانی مستقیم نسخهٔ اصلی نیست.
-- مراحل فعلی نمونه‌اند، نه مراحل اصلی بازی. باید بعداً با داده‌های واقعی تطبیق داده شوند.
+Current features: 30 sample Persian word-puzzle stages, Android native controls intended for TalkBack, Persian Android TTS when installed, synthesized device tone effects for taps/menu/start/stage/hint/correct/wrong/win, short vibration cues, hints, answer checking, backspace, clear and restart.
 
-## ساخت
-از ریشهٔ مخزن: `./gradlew :game:assembleDebug`
-خروجی: `game/build/outputs/apk/debug/game-debug.apk`
+Voice note: speech uses the Persian voice data available on the device. The APK does not bundle a natural Persian speech model. If the device has no Persian TTS voice, install a Persian-capable TTS engine/data. Effects are synthesized Android tones, not the original game's music or sound assets.
+
+Limits: the supplied archives did not contain the full Unity project, original art/audio files, or original stage database. The app id is `ir.iran.shahrbanoorebuild`, so it installs separately from `com.plus9.shahrbanoo`. This independent sample rebuild has not yet been device-tested with TalkBack.
+
+Build from repo root: `./gradlew :game:assembleDebug`
+Expected output: `game/build/outputs/apk/debug/game-debug.apk`

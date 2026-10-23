@@ -13,7 +13,7 @@ import android.content.SharedPreferences
 /** Accessible native word puzzle. Keep the letter keyboard stable while typing so TalkBack focus does not jump to the top. */
 class MainActivity : Activity() {
  private lateinit var prefs:SharedPreferences
- private val game=GameEngine()
+ private lateinit var game:GameEngine
  private lateinit var root:LinearLayout
  private lateinit var live:TextView
  private lateinit var answerView:TextView
@@ -25,6 +25,7 @@ class MainActivity : Activity() {
  override fun onCreate(savedInstanceState:Bundle?){
   super.onCreate(savedInstanceState)
   prefs=getSharedPreferences("shahrbanoo_settings",MODE_PRIVATE)
+  game=GameEngine(this)
   game.restoreProgress(prefs.getInt("saved_stage_index",0),prefs.getInt("saved_hints",3))
   window.decorView.layoutDirection=View.LAYOUT_DIRECTION_RTL
   home()

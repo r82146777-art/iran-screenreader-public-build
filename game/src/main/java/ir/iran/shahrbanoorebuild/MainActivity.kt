@@ -159,11 +159,19 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
   answerView=text("پاسخ فعلی: ${game.typed().ifEmpty{"هنوز حرفی انتخاب نشده"}}")
   hintsView=text("راهنماهای باقی‌مانده: ${game.hints()}")
   text("کیبورد حروف — با انتخاب هر حرف، فوکوس صفحه‌خوان در همین بخش می‌ماند.")
-  val row=LinearLayout(this).apply{
+  var row=LinearLayout(this).apply{
    orientation=LinearLayout.HORIZONTAL;gravity=Gravity.CENTER;layoutDirection=View.LAYOUT_DIRECTION_RTL
    isFocusable=false
   }
+  root.addView(row,params())
   game.availableLetters().forEachIndexed{i,ch->
+   if(i>0 && i%7==0){
+    row=LinearLayout(this).apply{
+     orientation=LinearLayout.HORIZONTAL;gravity=Gravity.CENTER;layoutDirection=View.LAYOUT_DIRECTION_RTL
+     isFocusable=false
+    }
+    root.addView(row,params())
+   }
    val letterButton=Button(this).apply{
     text=ch.toString();textSize=if(largeText())26f else 21f
     contentDescription="حرف $ch، گزینه ${i+1}"
@@ -184,7 +192,6 @@ class MainActivity : Activity(), TextToSpeech.OnInitListener {
    letterButtons.add(letterButton)
    row.addView(letterButton,LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.WRAP_CONTENT,1f).apply{setMargins(2,2,2,2)})
   }
-  root.addView(row,params())
   button("حذف آخرین حرف"){game.backspace();play("tap");stage()}
   button("پاک کردن پاسخ"){game.clear();play("tap");stage()}
   button("بررسی پاسخ"){

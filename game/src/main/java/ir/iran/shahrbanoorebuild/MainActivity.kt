@@ -142,7 +142,12 @@ class MainActivity : Activity() {
    play("win");speak("تبریک! همه مراحل این نسخه را تمام کردید.");return
   }
   val s=game.current()
+  val chapterNumber=(s.number-1)/25+1
+  val chapterCount=(game.stageCount()+24)/25
+  val chapterStageNumber=(s.number-1)%25+1
+  val chapterStageCount=minOf(25,game.stageCount()-(chapterNumber-1)*25)
   layout("مرحله ${s.number} از ${game.stageCount()}")
+  text("فصل $chapterNumber از $chapterCount — مرحله $chapterStageNumber از $chapterStageCount")
   text("دسته: ${s.category}")
   text("سرنخ: ${s.clue}")
   answerView=text("پاسخ فعلی: ${game.typed().ifEmpty{"هنوز حرفی انتخاب نشده"}}")
@@ -197,7 +202,7 @@ class MainActivity : Activity() {
    }else{play("wrong");speak("پاسخ درست نیست. دوباره تلاش کنید.")}
   }
   button("راهنمایی"){if(game.useHint()){prefs.edit().putInt("saved_hints",game.hints()).apply();play("hint");stage()}else{play("wrong");speak("راهنمایی دیگری باقی نمانده است.")}}
-  button("تکرار سرنخ"){play("focus");speak("مرحله ${s.number}. دسته ${s.category}. ${s.clue}")}
+  button("تکرار سرنخ"){play("focus");speak("فصل $chapterNumber، مرحله $chapterStageNumber از $chapterStageCount. دسته ${s.category}. ${s.clue}")}
   button("تنظیمات"){play("menu");settings()}
   button("منوی اصلی"){play("menu");home()}
   play("stage")

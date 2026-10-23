@@ -25,6 +25,7 @@ class MainActivity : Activity() {
  override fun onCreate(savedInstanceState:Bundle?){
   super.onCreate(savedInstanceState)
   prefs=getSharedPreferences("shahrbanoo_settings",MODE_PRIVATE)
+  game.restoreProgress(prefs.getInt("saved_stage_index",0),prefs.getInt("saved_hints",3))
   window.decorView.layoutDirection=View.LAYOUT_DIRECTION_RTL
   home()
  }
@@ -62,13 +63,13 @@ class MainActivity : Activity() {
   layout("شهربانو")
   text("بازی معمای کلمه — نسخه دسترس‌پذیر")
   text("برای نابینایان و افراد بینا؛ حروف را انتخاب کنید و پاسخ را پیدا کنید.")
-  button("شروع بازی"){play("start");stage()}
+  button(if(prefs.getInt("saved_stage_index",0)>0) "ادامه بازی از مرحله ${prefs.getInt("saved_stage_index",0)+1}" else "شروع بازی"){play("start");stage()}
   button("راهنمای بازی"){
    play("menu")
    speak("سرنخ و دسته را بشنوید. سپس حروف کیبورد را یکی یکی انتخاب کنید. بعد از انتخاب هر حرف، تمرکز صفحه‌خوان روی همان کیبورد باقی می‌ماند. با حذف آخرین حرف یا پاک کردن پاسخ می‌توانید اصلاح کنید. از راهنمایی برای آشکار شدن حرف استفاده کنید.")
   }
   button("تنظیمات"){play("menu");settings()}
-  button("شروع دوباره"){game.restart();play("start");stage()}
+  button("شروع بازی از اول"){\n   android.app.AlertDialog.Builder(this)\n    .setTitle("شروع بازی از اول")\n    .setMessage("پیشرفت ذخیره‌شده پاک شود و بازی از مرحله اول شروع شود؟")\n    .setNegativeButton("انصراف",null)\n    .setPositiveButton("شروع از اول"){_,_->\n     game.restart();prefs.edit().putInt("saved_stage_index",0).putInt("saved_hints",3).apply()\n     play("start");stage()\n    }.show()\n  }
  }
  private fun settings(){
   layout("تنظیمات بازی")
@@ -86,7 +87,7 @@ class MainActivity : Activity() {
    setTextColor(if(highContrast())Color.WHITE else Color.BLACK)
    setOnCheckedChangeListener{_,checked->
     prefs.edit().putBoolean("music_enabled",checked).apply()
-    if(checked)GameSound.startMusic() else GameSound.stopMusic()
+    if(checked)GameSound.startMusic(this@MainActivity) else GameSound.stopMusic()
    }
   }
   root.addView(music,params())
@@ -126,7 +127,7 @@ class MainActivity : Activity() {
   if(game.isComplete){
    layout("آفرین! همه مراحل تمام شد")
    text("پایان نسخه بازسازی‌شده")
-   button("بازی دوباره"){game.restart();play("start");stage()}
+   button("شروع بازی از اول"){game.restart();prefs.edit().putInt("saved_stage_index",0).putInt("saved_hints",3).apply();play("start");stage()}
    button("منوی اصلی"){play("menu");home()}
    play("win");speak("تبریک! همه مراحل این نسخه را تمام کردید.");return
   }
@@ -174,12 +175,12 @@ class MainActivity : Activity() {
   button("پاک کردن پاسخ"){game.clear();play("tap");stage()}
   button("بررسی پاسخ"){
    if(game.submit()){
-    play("correct");Toast.makeText(this,"پاسخ درست بود",Toast.LENGTH_SHORT).show()
+    prefs.edit().putInt("saved_stage_index",game.index()).putInt("saved_hints",game.hints()).apply()\n    play("correct");Toast.makeText(this,"پاسخ درست بود",Toast.LENGTH_SHORT).show()
     stage()
     if(!game.isComplete)speak("آفرین، پاسخ درست است. مرحله ${game.current().number}. ${game.current().clue}")
    }else{play("wrong");speak("پاسخ درست نیست. دوباره تلاش کنید.")}
   }
-  button("راهنمایی"){if(game.useHint()){play("hint");stage()}else{play("wrong");speak("راهنمایی دیگری باقی نمانده است.")}}
+  button("راهنمایی"){if(game.useHint()){prefs.edit().putInt("saved_hints",game.hints()).apply();play("hint");stage()}else{play("wrong");speak("راهنمایی دیگری باقی نمانده است.")}}
   button("تکرار سرنخ"){play("focus");speak("مرحله ${s.number}. دسته ${s.category}. ${s.clue}")}
   button("تنظیمات"){play("menu");settings()}
   button("منوی اصلی"){play("menu");home()}

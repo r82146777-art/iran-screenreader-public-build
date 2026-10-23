@@ -36,7 +36,7 @@ jobs:
           set +e
           for status in queued in_progress; do
             gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs?status=$status&per_page=100" \
-              -q '.workflow_runs[] | select(.path == ".github/workflows/build-apk.yml") | .id' |
+              -q '.workflow_runs[] | select(.path == ".github/workflows/build-apk.yml" or .path == ".github/workflows/shahrbanoo-android.yml") | .id' |
             while read -r run_id; do
               [ -n "$run_id" ] || continue
               [ "$run_id" = "$GITHUB_RUN_ID" ] && continue

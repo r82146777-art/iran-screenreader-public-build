@@ -20,12 +20,8 @@ jobs:
           mkdir -p "$ANDROID_HOME/licenses"
           echo -e "24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
           echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-          SM=$(find "$ANDROID_HOME" -name sdkmanager -type f 2>/dev/null | head -1)
-          if [ -n "$SM" ]; then
-            yes | "$SM" --licenses >/dev/null 2>&1 || true
-            "$SM" "platforms;android-35" "build-tools;35.0.0" "platform-tools" 2>/dev/null || \
-            "$SM" "platforms;android-34" "build-tools;34.0.0" "platform-tools" 2>/dev/null || true
-          fi
+          test -d "$ANDROID_HOME/platforms/android-35" || test -d "$ANDROID_HOME/platforms/android-34"
+          test -d "$ANDROID_HOME/build-tools/35.0.0" || test -d "$ANDROID_HOME/build-tools/34.0.0"
       - name: Install Gradle
         run: |
           curl -sL https://services.gradle.org/distributions/gradle-8.9-bin.zip -o /tmp/gradle.zip

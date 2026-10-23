@@ -10,6 +10,10 @@ on:
       - "settings.gradle.kts"
       - ".github/workflows/shahrbanoo-android.yml"
 
+concurrency:
+  group: shahrbanoo-build-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

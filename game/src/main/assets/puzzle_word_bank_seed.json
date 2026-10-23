@@ -14,7 +14,8 @@
     "Batch 8 added with 100 new clue-answer pairs. Content is loaded sequentially by the game engine.",
     "Batch 9 adds 100 authored Persian clue-answer pairs across science, transport, accounting, and culture.",
     "Batch 10 adds 100 new Persian clue-answer pairs across medicine, astronomy, agriculture, music, and technical topics.",
-    "Batch 11 content is being added in two small commits to keep exactly 100 new stages in the overall batch."
+    "Batch 11 content is being added in two small commits to keep exactly 100 new stages in the overall batch.",
+    "Batch 11 is complete at 100 new entries across two commits."
   ],
   "entries": [
     {
@@ -5486,6 +5487,21 @@
       "category": "حمل‌ونقل شهری",
       "answer": "سامانهٔ کرایه",
       "clue": "روش یا شبکه‌ای برای پرداخت هزینهٔ استفاده از وسیلهٔ نقلیه"
+    },
+    {
+      "category": "بوم‌شناسی شهری",
+      "answer": "جزیرهٔ گرمایی",
+      "clue": "پدیده‌ای که در آن بخش‌های ساخته‌شدهٔ شهر از نواحی اطراف گرم‌تر می‌شوند"
+    },
+    {
+      "category": "بوم‌شناسی شهری",
+      "answer": "بام سبز",
+      "clue": "بام ساختمانی که بخشی از آن با گیاهان و بستر کشت پوشیده شده است"
+    },
+    {
+      "category": "بوم‌شناسی شهری",
+      "answer": "باغ بارانی",
+      "clue": "فضای کاشت طراحی‌شده‌ای که رواناب باران را جمع و به نفوذ آن در خاک کمک می‌کند"
     }
   ]
 }

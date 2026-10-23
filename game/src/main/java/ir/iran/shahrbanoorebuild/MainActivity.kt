@@ -215,7 +215,7 @@ class MainActivity : Activity() {
  private fun params()=LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT)
  override fun onResume(){
   super.onResume()
-  if(::prefs.isInitialized && prefs.getBoolean("music_enabled",false))GameSound.startMusic()
+  if(::prefs.isInitialized && prefs.getBoolean("music_enabled",false))GameSound.startMusic(this@MainActivity)
  }
  override fun onPause(){
   GameSound.stopMusic()

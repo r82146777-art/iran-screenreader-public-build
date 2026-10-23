@@ -131,7 +131,7 @@ class MainActivity : Activity() {
   button("آزمایش گوینده"){speak("سلام! این صدای راهنمای بازی شهربانو است.")}
   button("بازگشت به منو"){play("menu");home()}
  }
- private fun stage(){
+ private fun stage(announceIntro:Boolean=true){
   letterButtons.clear()
   if(game.isComplete){
    layout("آفرین! همه مراحل تمام شد")
@@ -186,15 +186,21 @@ class MainActivity : Activity() {
    if(game.submit()){
     prefs.edit().putInt("saved_stage_index",game.index()).putInt("saved_hints",game.hints()).apply()
     play("correct");Toast.makeText(this,"پاسخ درست بود",Toast.LENGTH_SHORT).show()
-    stage()
-    if(!game.isComplete)speak("آفرین، پاسخ درست است. مرحله ${game.current().number}. ${game.current().clue}")
+    stage(announceIntro=false)
+    if(game.isComplete){
+     speak("آفرین! پاسخ صحیح بود. تبریک می‌گوییم؛ همه مراحل این نسخه را به پایان رساندید.")
+    }else{
+     val next=game.current()
+     speak("آفرین! پاسخ صحیح است. حالا وارد مرحله ${next.number} می‌شویم. دسته: ${next.category}. سرنخ مرحله جدید: ${next.clue}")
+    }
    }else{play("wrong");speak("پاسخ درست نیست. دوباره تلاش کنید.")}
   }
   button("راهنمایی"){if(game.useHint()){prefs.edit().putInt("saved_hints",game.hints()).apply();play("hint");stage()}else{play("wrong");speak("راهنمایی دیگری باقی نمانده است.")}}
   button("تکرار سرنخ"){play("focus");speak("مرحله ${s.number}. دسته ${s.category}. ${s.clue}")}
   button("تنظیمات"){play("menu");settings()}
   button("منوی اصلی"){play("menu");home()}
-  play("stage");speak("مرحله ${s.number}. دسته ${s.category}. سرنخ: ${s.clue}.")
+  play("stage")
+  if(announceIntro)speak("مرحله ${s.number}. دسته ${s.category}. سرنخ: ${s.clue}.")
  }
  private fun text(s:String):TextView{
   val view=TextView(this).apply{

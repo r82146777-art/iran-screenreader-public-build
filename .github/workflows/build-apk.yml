@@ -37,9 +37,14 @@ jobs:
           export ANDROID_HOME="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
           gradle wrapper --gradle-version 8.9
           chmod +x gradlew
-          ./gradlew :app:assembleDebug --no-daemon --stacktrace
+          ./gradlew :app:assembleDebug :game:assembleDebug --no-daemon --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: iran-screenreader-v5-apk
           path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shahrbanoo-accessible-rebuild-apk
+          path: game/build/outputs/apk/debug/*.apk
           if-no-files-found: error

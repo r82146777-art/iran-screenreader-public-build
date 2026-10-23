@@ -171,6 +171,7 @@ public final class GameEngine {
  }
  public boolean submit(){if(isComplete()||!typed.toString().equals(current().answer))return false;index++;typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();return true;}
  public void clear(){typed.setLength(0);usedSlots.clear();selectedSlots.clear();}
- public void restoreProgress(int savedIndex,int savedHints){index=Math.max(0,Math.min(savedIndex,stages.size()-1));hints=Math.max(0,Math.min(savedHints,99));typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();}\n public void restart(){index=0;hints=3;typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();}
+ public void restoreProgress(int savedIndex,int savedHints){index=Math.max(0,Math.min(savedIndex,stages.size()-1));hints=Math.max(0,Math.min(savedHints,99));typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();}
+ public void restart(){index=0;hints=3;typed.setLength(0);usedSlots.clear();selectedSlots.clear();makeChoices();}
 
 }

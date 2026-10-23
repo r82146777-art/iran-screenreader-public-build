@@ -1,0 +1,11 @@
+Bundled Persian speech model attribution
+
+Voice model: vits-piper-fa_IR-gyro-medium
+Model source: https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models
+Runtime: Sherpa-ONNX 1.10.41
+Persian voice model license: CC BY-NC 4.0 (Creative Commons Attribution-NonCommercial 4.0 International).
+License text: https://creativecommons.org/licenses/by-nc/4.0/
+
+This model is a third-party pretrained voice, not a voice personally recorded or trained by the Shahrbanoo project. It is bundled to provide natural-sounding offline Persian synthesis and avoid the Android system TTS engine. Non-commercial use only under the model's license; commercial distribution requires checking permissions and obtaining any required additional authorization.
+
+Sherpa-ONNX source and licensing: https://github.com/k2-fsa/sherpa-onnx

@@ -69,7 +69,16 @@ class MainActivity : Activity() {
    speak("سرنخ و دسته را بشنوید. سپس حروف کیبورد را یکی یکی انتخاب کنید. بعد از انتخاب هر حرف، تمرکز صفحه‌خوان روی همان کیبورد باقی می‌ماند. با حذف آخرین حرف یا پاک کردن پاسخ می‌توانید اصلاح کنید. از راهنمایی برای آشکار شدن حرف استفاده کنید.")
   }
   button("تنظیمات"){play("menu");settings()}
-  button("شروع بازی از اول"){\n   android.app.AlertDialog.Builder(this)\n    .setTitle("شروع بازی از اول")\n    .setMessage("پیشرفت ذخیره‌شده پاک شود و بازی از مرحله اول شروع شود؟")\n    .setNegativeButton("انصراف",null)\n    .setPositiveButton("شروع از اول"){_,_->\n     game.restart();prefs.edit().putInt("saved_stage_index",0).putInt("saved_hints",3).apply()\n     play("start");stage()\n    }.show()\n  }
+  button("شروع بازی از اول"){
+   android.app.AlertDialog.Builder(this)
+    .setTitle("شروع بازی از اول")
+    .setMessage("پیشرفت ذخیره‌شده پاک شود و بازی از مرحله اول شروع شود؟")
+    .setNegativeButton("انصراف",null)
+    .setPositiveButton("شروع از اول"){_,_->
+     game.restart();prefs.edit().putInt("saved_stage_index",0).putInt("saved_hints",3).apply()
+     play("start");stage()
+    }.show()
+  }
  }
  private fun settings(){
   layout("تنظیمات بازی")
@@ -175,7 +184,8 @@ class MainActivity : Activity() {
   button("پاک کردن پاسخ"){game.clear();play("tap");stage()}
   button("بررسی پاسخ"){
    if(game.submit()){
-    prefs.edit().putInt("saved_stage_index",game.index()).putInt("saved_hints",game.hints()).apply()\n    play("correct");Toast.makeText(this,"پاسخ درست بود",Toast.LENGTH_SHORT).show()
+    prefs.edit().putInt("saved_stage_index",game.index()).putInt("saved_hints",game.hints()).apply()
+    play("correct");Toast.makeText(this,"پاسخ درست بود",Toast.LENGTH_SHORT).show()
     stage()
     if(!game.isComplete)speak("آفرین، پاسخ درست است. مرحله ${game.current().number}. ${game.current().clue}")
    }else{play("wrong");speak("پاسخ درست نیست. دوباره تلاش کنید.")}

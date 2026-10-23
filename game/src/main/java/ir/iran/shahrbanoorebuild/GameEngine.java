@@ -1,5 +1,10 @@
 package ir.iran.shahrbanoorebuild;
 import java.util.*;
+import android.content.Context;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 /** Independent native word-puzzle content; not original Unity source. */
 public final class GameEngine {
  public static final class Stage {
@@ -114,7 +119,25 @@ public final class GameEngine {
  private int index=0,hints=3; private final StringBuilder typed=new StringBuilder();
  private List<String> choices=new ArrayList<>();
  private final Set<Integer> usedSlots=new HashSet<>(); private final List<Integer> selectedSlots=new ArrayList<>();
- public GameEngine(){makeChoices();}
+ public GameEngine(Context context){loadCuratedBank(context);makeChoices();}
+ private void loadCuratedBank(Context context){
+  Set<String> known=new HashSet<>();
+  for(Stage s:stages) known.add(normalize(s.answer));
+  try(BufferedReader reader=new BufferedReader(new InputStreamReader(context.getAssets().open("puzzle_word_bank_seed.json"),"UTF-8"))){
+   StringBuilder raw=new StringBuilder();String line;while((line=reader.readLine())!=null)raw.append(line);
+   JSONArray entries=new JSONObject(raw.toString()).getJSONArray("entries");
+   for(int i=0;i<entries.length();i++){
+    JSONObject item=entries.getJSONObject(i);
+    String category=item.optString("category","").trim();
+    String answer=item.optString("answer","").trim();
+    String clue=item.optString("clue","").trim();
+    String key=normalize(answer);
+    if(category.isEmpty()||answer.isEmpty()||clue.isEmpty()||key.length()<2||known.contains(key))continue;
+    known.add(key);stages.add(new Stage(stages.size()+1,category,answer,clue));
+   }
+  }catch(Exception e){android.util.Log.e("Shahrbanoo","Could not load curated Persian word bank",e);}
+ }
+ private static String normalize(String value){return value.replace("\\u200c","").replace(" ","").trim();}
  public Stage current(){return stages.get(index);} public int stageCount(){return stages.size();}
  public int index(){return index;} public String typed(){return typed.toString();}
  public int hints(){return hints;} public boolean isComplete(){return index>=stages.size();}

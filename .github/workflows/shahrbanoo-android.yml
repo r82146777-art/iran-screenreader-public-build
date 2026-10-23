@@ -24,6 +24,24 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Download bundled offline Persian neural voice
+        run: |
+          set -euo pipefail
+          RELEASE="https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models"
+          ASSETS="game/src/main/assets/tts"
+          mkdir -p game/libs "$ASSETS" /tmp/fa-voice
+          curl -fL --retry 3 "https://huggingface.co/csukuangfj/sherpa-onnx-libs/resolve/main/android/aar/sherpa-onnx-1.10.41.aar" -o game/libs/sherpa-onnx.aar
+          curl -fL --retry 3 "$RELEASE/vits-piper-fa_IR-gyro-medium.tar.bz2" -o /tmp/fa-voice/model.tar.bz2
+          tar -xjf /tmp/fa-voice/model.tar.bz2 -C /tmp/fa-voice
+          MODEL="$(find /tmp/fa-voice -type f -name 'fa_IR-gyro-medium.onnx' -print -quit)"
+          TOKENS="$(find /tmp/fa-voice -type f -name 'tokens.txt' -print -quit)"
+          test -n "$MODEL" && test -n "$TOKENS"
+          cp "$MODEL" "$ASSETS/model_fa.onnx"
+          cp "$TOKENS" "$ASSETS/tokens_fa.txt"
+          curl -fL --retry 3 "$RELEASE/espeak-ng-data.tar.bz2" -o /tmp/espeak-ng-data.tar.bz2
+          tar -xjf /tmp/espeak-ng-data.tar.bz2 -C "$ASSETS"
+          test -d "$ASSETS/espeak-ng-data"
+          echo "Bundled Persian voice model size: $(du -h "$ASSETS/model_fa.onnx" | cut -f1)"
       - name: Install Gradle
         run: |
           curl -fsSL https://services.gradle.org/distributions/gradle-8.9-bin.zip -o /tmp/gradle.zip

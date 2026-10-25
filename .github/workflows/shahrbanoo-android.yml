@@ -32,6 +32,13 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Decode persistent release keystore
+        run: |
+          set -euo pipefail
+          mkdir -p game/keystore
+          base64 -d game/keystore/shahrbanoo-release.keystore.b64 > game/keystore/shahrbanoo-release.keystore
+          test -s game/keystore/shahrbanoo-release.keystore
+          echo "Keystore ready: $(wc -c < game/keystore/shahrbanoo-release.keystore) bytes"
       - name: Cancel old duplicate APK build runs
         env:
           GH_TOKEN: ${{ github.token }}

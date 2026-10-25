@@ -8,8 +8,10 @@ on:
       - "game/src/main/java/**"
       - "game/src/main/res/**"
       - "game/build.gradle.kts"
+      - "game/keystore/**"
       - "build.gradle.kts"
       - "settings.gradle.kts"
+      - ".github/workflows/shahrbanoo-android.yml"
 
 concurrency:
   group: shahrbanoo-build-${{ github.ref }}
@@ -75,13 +77,13 @@ jobs:
           curl -fsSL https://services.gradle.org/distributions/gradle-8.9-bin.zip -o /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /tmp
           echo "/tmp/gradle-8.9/bin" >> "$GITHUB_PATH"
-      - name: Build debug APK
-        run: gradle --no-daemon :game:assembleDebug
+      - name: Build signed release APK
+        run: gradle --no-daemon :game:assembleRelease
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: shahrbanoo-accessible-debug-apk
-          path: game/build/outputs/apk/debug/*.apk
+          name: shahrbanoo-accessible-signed-apk
+          path: game/build/outputs/apk/release/*.apk
           if-no-files-found: error
           retention-days: 30
       - name: Publish raw APK at a direct HTTPS URL
@@ -89,12 +91,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          APK="$(find game/build/outputs/apk/debug -maxdepth 1 -type f -name '*.apk' -print -quit)"
+          APK="$(find game/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' -print -quit)"
           test -n "$APK"
           if ! gh release view shahrbanoo-latest --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             gh release create shahrbanoo-latest --repo "$GITHUB_REPOSITORY" \
               --title "Shahrbanoo Accessible APK (latest)" \
-              --notes "Latest successful build of the accessible Shahrbanoo rebuild."
+              --notes "Latest successful signed build of the accessible Shahrbanoo rebuild."
           fi
           gh release upload shahrbanoo-latest "$APK#shahrbanoo.apk" \
+            --repo "$GITHUB_REPOSITORY" --clobber
+          cp "$APK" game-debug.apk
+          gh release upload shahrbanoo-latest "game-debug.apk#game-debug.apk" \
             --repo "$GITHUB_REPOSITORY" --clobber

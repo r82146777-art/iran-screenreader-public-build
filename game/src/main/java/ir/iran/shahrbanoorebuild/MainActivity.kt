@@ -20,6 +20,7 @@ class MainActivity : Activity() {
  private lateinit var hintsView:TextView
  private val letterButtons= mutableListOf<Button>()
  private fun soundEnabled()=prefs.getBoolean("sound_enabled",true)
+ private fun speechEnabled()=prefs.getBoolean("speech_enabled",true)
  private fun highContrast()=prefs.getBoolean("high_contrast",false)
  private fun largeText()=prefs.getBoolean("large_text",false)
  override fun onCreate(savedInstanceState:Bundle?){
@@ -33,7 +34,9 @@ class MainActivity : Activity() {
  private fun speak(s:String){
   live.text=s
   live.announceForAccessibility(s)
-  NaturalPersianVoice.speak(this,s,prefs.getFloat("speech_rate",0.92f))
+  if(speechEnabled()){
+   NaturalPersianVoice.speak(this,s,prefs.getFloat("speech_rate",0.92f))
+  }
  }
  private fun play(kind:String){if(soundEnabled())GameSound.play(this,kind)}
  private fun layout(title:String){
@@ -95,12 +98,28 @@ class MainActivity : Activity() {
    text="موسیقی پس‌زمینه (ملودی ساخته‌شده داخل برنامه)";textSize=19f
    isChecked=prefs.getBoolean("music_enabled",false)
    setTextColor(if(highContrast())Color.WHITE else Color.BLACK)
+   contentDescription=text.toString()
    setOnCheckedChangeListener{_,checked->
     prefs.edit().putBoolean("music_enabled",checked).apply()
     if(checked)GameSound.startMusic(this@MainActivity) else GameSound.stopMusic()
    }
   }
   root.addView(music,params())
+  val speech=CheckBox(this).apply{
+   text="فعال بودن صدای گوینده";textSize=19f
+   isChecked=speechEnabled()
+   setTextColor(if(highContrast())Color.WHITE else Color.BLACK)
+   contentDescription=text.toString()
+   setOnCheckedChangeListener{_,checked->
+    prefs.edit().putBoolean("speech_enabled",checked).apply()
+    if(checked){
+     NaturalPersianVoice.speak(this@MainActivity,"صدای گوینده فعال شد.",prefs.getFloat("speech_rate",0.92f))
+    }else{
+     NaturalPersianVoice.stopPlayback()
+    }
+   }
+  }
+  root.addView(speech,params())
   val contrast=CheckBox(this).apply{
    text="حالت کنتراست بالا";textSize=19f;isChecked=highContrast()
    setTextColor(if(highContrast())Color.WHITE else Color.BLACK)
